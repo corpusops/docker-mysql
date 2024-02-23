@@ -256,7 +256,7 @@ SKIP_DOCKER="docker(\/|:)([0-9]+\.[0-9]+\.|17|18.0[1-6]|1$|1(\.|-)).*"
 CURRENT_TS=$(date +%s)
 IMAGES_SKIP_NS="((mailhog|postgis|pgrouting(-bare)?|^library|dejavu|(minio/(minio|mc))))"
 
-SKIPPED_TAGS="[0-9]+\.[0-9]+\.[0-9]+"
+SKIPPED_TAGS="mysql:[0-9]+\.[0-9]+\.[0-9]+"
 
 default_images="
 library/mysql
