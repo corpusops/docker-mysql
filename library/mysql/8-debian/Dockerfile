@@ -1,4 +1,4 @@
-FROM library/mysql:5
+FROM library/mysql:8-debian
 ARG DO_UPDATE=y
 ARG NONINTERACTIVE=y
 ARG INSTALL_DEFAULT_LOCALE="fr_FR.UTF-8"
