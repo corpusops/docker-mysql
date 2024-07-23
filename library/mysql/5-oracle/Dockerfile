@@ -49,7 +49,6 @@ RUN sh -c 'set -ex \
     && ./add_gosu.sh \
     && ./add_forego.sh \
     && ln -sfv ${COPS_HELPERS}/supervisord-go /bin/supervisord-go \
-    && DEBUG=1 ./setup_locales.sh \
     && sed -i -re "/var\\/log\\/messages \\{\\}/d" /etc/logrotate.conf\
     && sed -i -re "s/ dateext/nodateext/g" /etc/logrotate.conf\
     && if ! (grep -q /var/log/messages /etc/logrotate.conf);then\

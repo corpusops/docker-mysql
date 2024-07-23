@@ -589,6 +589,7 @@ do_refresh_images() {
             fi
         done
     done <<< "$imagess"
+   sed -i -re "/DEBUG=1.* .\/setup_locales.sh/d" library/mysql/{5,5*oracle}/Docker*
 }
 
 char_occurence() {
