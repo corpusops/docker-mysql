@@ -259,7 +259,7 @@ SKIP_DOCKER="docker(\/|:)([0-9]+\.[0-9]+\.|17|18.0[1-6]|1$|1(\.|-)).*"
 CURRENT_TS=$(date +%s)
 IMAGES_SKIP_NS="((mailhog|postgis|pgrouting(-bare)?|^library|dejavu|(minio/(minio|mc))))"
 
-SKIPPED_TAGS="mysql:[0-9]+\.[0-9]+\.[0-9]+"
+SKIPPED_TAGS="mysql:([0-9]+\.[0-9]+\.[0-9]+|5$|5.*oracle|5\.[567]$)"
 
 default_images="
 library/mysql
@@ -659,7 +659,7 @@ do_refresh_images() {
             fi
         done
     done <<< "$imagess"
-   sed -i -re "/DEBUG=1.* .\/setup_locales.sh/d" library/mysql/{5,5.7,5*oracle}/Docker*
+   #sed -i -re "/DEBUG=1.* .\/setup_locales.sh/d" library/mysql/{5,5.7,5*oracle}/Docker*
 }
 
 char_occurence() {

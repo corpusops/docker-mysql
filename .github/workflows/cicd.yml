@@ -68,7 +68,7 @@ jobs:
         - "library/mysql/latest library/mysql/oracle library/mysql/debian library/mysql/lts"
         - "library/mysql/9-oracle library/mysql/9"
         - "library/mysql/8-debian library/mysql/8-oracle library/mysql/8"
-        - "library/mysql/5-debian library/mysql/5-oracle library/mysql/5"
+        - "library/mysql/5-debian library/mysql/5-debian"
         #- "corpusops/test/a corpusops/test/b corpusops/test/c"
         # all images that werent explicitly told to be built would be built in the next batches
         # we span them onto N jobs
