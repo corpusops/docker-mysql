@@ -14,6 +14,7 @@ ARG DOCKERIZE_RELEASE=latest
 ARG CURL_SSL_OPTS=--tlsv1
 ARG DOCKER_IMAGES_COMMIT=master
 ARG COPS_HELPERS=/cops_helpers
+RUN gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B7B3B788A8D3785C && rm /etc/apt/keyrings/mysql.gpg && gpg  --output /etc/apt/keyrings/mysql.gpg --export B7B3B788A8D3785C
 ADD \
     helpers/up.sh \
     helpers/add_gosu.sh \
