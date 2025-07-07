@@ -461,7 +461,7 @@ gen_image() {
         if [ -e "$df" ];then dockerfiles="$dockerfiles $df" && break;fi
     done
     local parts=""
-    for partsstep in squashpre from args argspost helpers pre base post postextra clean cleanpost predosquash squash postdosquash extra labels labelspost;do
+    for partsstep in squashpre from args argspost helpers pre base post postextra clean cleanpost predosquash squash squashpreexec squashexec postdosquash extra labels labelspost;do
         parts="$parts pre_${partsstep} ${partsstep} post_${partsstep}"
     done
     parts=$(echo "$parts"|xargs)
@@ -560,7 +560,7 @@ get_image_tags() {
     # cleanup elastic minor images (keep latest)
     atags="$(filter_tags "$(cat $t.raw)")"
     changed=
-    if ( echo $t | grep -E -q "$ONLY_ONE_MINOR" );then
+    if [[ "x${ONLY_ONE_MINOR}" != "x" ]] && ( echo $n | grep -E -q "$ONLY_ONE_MINOR" );then
         oomt=""
         for ix in $(seq 0 30);do
             if ! ( echo "$atags" | grep -E -q "^$ix\." );then continue;fi
