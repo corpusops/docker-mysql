@@ -259,7 +259,9 @@ SKIP_DOCKER="docker(\/|:)([0-9]+\.[0-9]+\.|17|18.0[1-6]|1$|1(\.|-)).*"
 CURRENT_TS=$(date +%s)
 IMAGES_SKIP_NS="((mailhog|postgis|pgrouting(-bare)?|^library|dejavu|(minio/(minio|mc))))"
 
-SKIPPED_TAGS="mysql:([0-9]+\.[0-9]+\.[0-9]+|5$|5.*oracle|5\.[567]$)"
+MYSQL_SKIPPED_TAGS="mysql:([0-9]+\.[0-9]+\.[0-9]+|5$|5.*oracle|5\.[567]$)"
+SKIPPED_TAGS="$MYSQL_SKIPPED_TAGS"
+PROTECTED_VERSIONS=""
 
 default_images="
 library/mysql
@@ -486,6 +488,10 @@ gen_image() {
 is_skipped() {
     local ret=1 t="$@"
     if [[ -z $SKIPPED_TAGS ]];then return 1;fi
+    if [[ -n "${PROTECTED_VERSIONS}" ]] && ( echo "$t" | grep -E -q "$PROTECTED_VERSIONS" );then
+        debug "$t is protected, no skip"
+        return 1
+    fi
     if ( echo "$t" | grep -E -q "$SKIPPED_TAGS" );then
         ret=0
     fi
@@ -562,7 +568,7 @@ get_image_tags() {
     changed=
     if [[ "x${ONLY_ONE_MINOR}" != "x" ]] && ( echo $n | grep -E -q "$ONLY_ONE_MINOR" );then
         oomt=""
-        for ix in $(seq 0 30);do
+        for ix in $(seq 0 99);do
             if ! ( echo "$atags" | grep -E -q "^$ix\." );then continue;fi
             for j in $(seq 0 99);do
                 if ! ( echo "$atags" | grep -E -q "^$ix\.${j}\." );then continue;fi
@@ -585,10 +591,12 @@ get_image_tags() {
                     fi
                     if [[ -n "$selected" ]];then
                         for l in $(echo "$selected"|sed -e "$ d");do
-                            if [[ -z $oomt ]];then
-                                oomt="$l$"
-                            else
-                                oomt="$oomt|$l"
+                            if [[ -z "${PROTECTED_VERSIONS}" ]] || ! ( echo "$n:$l" | grep "${PROTECTED_VERSIONS}" );then
+                                if [[ -z $oomt ]];then
+                                    oomt="$l$"
+                                else
+                                    oomt="$oomt|$l"
+                                fi
                             fi
                         done
                     fi
@@ -601,7 +609,7 @@ get_image_tags() {
     fi
     if [[ -z ${SKIP_TAGS_REBUILD} ]];then
         rm -f "$t"
-        filter_tags "$atags" > $t
+        filter_tags "$atags" > "$t"
     fi
     set -e
     if [ -e "$t" ];then cat "$t";fi
